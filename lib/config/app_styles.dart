@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class COLORS {
@@ -8,6 +9,11 @@ class COLORS {
   static const Color dark = Color.fromARGB(255, 15, 15, 15);
   static const Color yellow = Color.fromARGB(255, 255, 211, 60);
 }
+
+final fInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(12),
+  borderSide: const BorderSide(color: COLORS.lightGrey),
+);
 
 final fEncodeSansBold = GoogleFonts.encodeSans(fontWeight: FontWeight.w700);
 final fEncodeSansSemibold = GoogleFonts.encodeSans(fontWeight: FontWeight.w600);

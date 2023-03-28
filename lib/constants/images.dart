@@ -26,4 +26,5 @@ class ICONS {
 class ANIMATIONS {
   static const splash = "assets/animations/splash.json";
   static const loading = "assets/animations/loading.json";
+  static const loadingProducts = "assets/animations/loading_products.json";
 }

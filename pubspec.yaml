@@ -40,6 +40,9 @@ dependencies:
   custom_navigation_bar: ^0.8.2
   lottie: ^2.3.0
   get: ^4.6.5
+  dio: ^5.1.0
+  cached_network_image: ^3.2.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
