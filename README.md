@@ -1,5 +1,7 @@
 # furniture_app
 
+run this command flutter packages get
+
 A new Flutter project.
 
 ## Getting Started
