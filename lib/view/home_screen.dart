@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +9,7 @@ import 'package:furniture_app/constants/images.dart';
 import 'package:furniture_app/controller/filter_controller.dart';
 import 'package:furniture_app/controller/products_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -232,7 +234,68 @@ class HomeScreen extends StatelessWidget {
                                           const Icon(Icons.error),
                                     ),
                                   ),
+                                  Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          color: COLORS.dark,
+                                        ),
+                                        child: const Icon(
+                                          CupertinoIcons.heart_solid,
+                                          size: 18,
+                                          color: COLORS.lightGrey,
+                                          // color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
+                              ),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                width: Get.width / 2.5,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productsController.products[index].name!,
+                                      textAlign: TextAlign.start,
+                                      style: fEncodeSansBold,
+                                    ),
+                                    Text(
+                                      productsController
+                                          .products[index].category!,
+                                      textAlign: TextAlign.start,
+                                      style: fEncodeSansMedium.copyWith(
+                                        color: COLORS.grey,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "\$${NumberFormat().format(
+                                            productsController
+                                                .products[index].price!,
+                                          )}",
+                                          style: fEncodeSansBold,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),

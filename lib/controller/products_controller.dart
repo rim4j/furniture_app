@@ -22,7 +22,7 @@ class ProductsController extends GetxController {
         response.data
             .forEach((item) => products.add(ProductModel.fromJson(item)));
 
-        category.add("all");
+        category.add("all products");
         for (var item in products) {
           if (!category.contains(item.category)) {
             category.add(item.category.toString());

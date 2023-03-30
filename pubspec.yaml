@@ -43,6 +43,7 @@ dependencies:
   dio: ^5.1.0
   cached_network_image: ^3.2.3
   smooth_page_indicator: ^1.0.1
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:
