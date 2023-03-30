@@ -197,7 +197,7 @@ class HomeScreen extends StatelessWidget {
                   Obx(
                     () => MasonryGridView.count(
                       shrinkWrap: true,
-                      crossAxisSpacing: 5,
+                      crossAxisSpacing: 0,
                       mainAxisSpacing: 30,
                       crossAxisCount: 2,
                       physics: const BouncingScrollPhysics(),
