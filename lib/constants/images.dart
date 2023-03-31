@@ -9,7 +9,7 @@ class ICONS {
   static const cartUnselected = "assets/icons/cart_icon_unselected.svg";
   static const favoriteSelected = "assets/icons/favorite_icon_selected.svg";
   static const favoriteUnselected = "assets/icons/favorite_icon_unselected.svg";
-  static const homeSelected = "assets/icons/home_icon_unselected.svg";
+  static const homeSelected = "assets/icons/home_icon_selected.svg";
   static const homeUnselected = "assets/icons/home_icon_unselected.svg";
 
   static const all = "assets/icons/all.svg";
