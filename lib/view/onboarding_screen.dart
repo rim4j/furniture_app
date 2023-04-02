@@ -144,7 +144,7 @@ class OnboardingScreen extends StatelessWidget {
                             curve: Curves.easeOut,
                           );
                         } else {
-                          Get.off(() => const MainScreen());
+                          Get.off(() => MainScreen());
                         }
                       },
                       child: Text(

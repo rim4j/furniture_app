@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:furniture_app/config/app_styles.dart';
 import 'package:furniture_app/constants/icons_data.dart';
 import 'package:furniture_app/constants/images.dart';
+import 'package:furniture_app/controller/details_product_controller.dart';
 import 'package:furniture_app/controller/filter_controller.dart';
 import 'package:furniture_app/controller/products_controller.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,8 @@ class HomeScreen extends StatelessWidget {
 
   final ProductsController productsController = Get.put(ProductsController());
   final FilterController filterController = Get.put(FilterController());
+  final DetailsProductController detailsProductController =
+      Get.put(DetailsProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +209,10 @@ class HomeScreen extends StatelessWidget {
                       itemCount: productsController.products.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            detailsProductController.getDetailsProduct(
+                                productsController.products[index].id!);
+                          },
                           child: Column(
                             children: [
                               Stack(
@@ -302,7 +308,8 @@ class HomeScreen extends StatelessWidget {
                         );
                       },
                     ),
-                  )
+                  ),
+                  SizedBox(height: Get.height / 7),
                 ],
               )
             : Center(
