@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:furniture_app/controller/cart_controller.dart';
+import 'package:furniture_app/models/cart_product_model.dart';
 import 'package:furniture_app/utils/convert_hex.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +12,7 @@ import 'package:lottie/lottie.dart';
 import 'package:readmore/readmore.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../components/furniture_divider.dart';
 import '../config/app_styles.dart';
 import '../constants/images.dart';
 import '../controller/details_product_controller.dart';
@@ -18,6 +21,8 @@ class DetailsScreen extends StatelessWidget {
   DetailsScreen({super.key});
   final DetailsProductController detailsProductController =
       Get.put(DetailsProductController());
+
+  final CartController cartController = Get.put(CartController());
 
   final PageController _indicatorController = PageController();
 
@@ -30,13 +35,35 @@ class DetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: COLORS.bg,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      //add to cart button
       floatingActionButton: Obx(
         () => detailsProductController.loading.value == false
             ? GestureDetector(
                 onTap: () {
                   if (detailsProductController.detailsProduct.value.stock !=
                       0) {
-                    print('Add to Cart button pressed!');
+                    var selectedColor = detailsProductController
+                        .detailsProduct.value.colors![selectedColorIndex.value];
+
+                    cartController.addProduct(
+                      CartProductModel(
+                        amount: count.value,
+                        category: detailsProductController
+                            .detailsProduct.value.category,
+                        color: selectedColor,
+                        id: detailsProductController.detailsProduct.value.id! +
+                            selectedColor,
+                        name:
+                            detailsProductController.detailsProduct.value.name,
+                        image: detailsProductController
+                            .detailsProduct.value.images![0]["url"],
+                        price:
+                            detailsProductController.detailsProduct.value.price,
+                        stock:
+                            detailsProductController.detailsProduct.value.stock,
+                      ),
+                    );
+                    cartController.calculateAmountAndTotal();
                   }
                 },
                 child: Container(
@@ -79,6 +106,7 @@ class DetailsScreen extends StatelessWidget {
       body: Obx(
         () => detailsProductController.loading.value == false
             ? SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     SizedBox(
@@ -231,8 +259,6 @@ class DetailsScreen extends StatelessWidget {
                                           border: Border.all(
                                               color: COLORS.lightGrey,
                                               width: 2),
-
-                                          // color: COLORS.lightGrey,
                                         ),
                                         child: const Icon(
                                           Icons.remove,
@@ -460,15 +486,4 @@ class DetailsScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget furnitureDivider() {
-  return Opacity(
-    opacity: 0.3,
-    child: Container(
-      width: Get.width / 1.1,
-      height: 1,
-      color: COLORS.grey,
-    ),
-  );
 }

@@ -1,12 +1,13 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:furniture_app/controller/cart_controller.dart';
 import 'package:get/get.dart';
 
 import '../config/app_styles.dart';
 import '../constants/images.dart';
 
-Widget bottomNav(RxInt currentScreenIndex) {
+Widget bottomNav(RxInt currentScreenIndex, RxInt totalAmount) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 8),
     height: Get.height / 12,
@@ -31,8 +32,8 @@ Widget bottomNav(RxInt currentScreenIndex) {
                 : SvgPicture.asset(ICONS.homeUnselected),
           ),
           CustomNavigationBarItem(
-            // badgeCount: 0,
-            // showBadge: true,
+            badgeCount: totalAmount.value,
+            showBadge: totalAmount.value == 0 ? false : true,
             icon: currentScreenIndex.value == 1
                 ? SvgPicture.asset(ICONS.cartSelected)
                 : SvgPicture.asset(ICONS.cartUnselected),

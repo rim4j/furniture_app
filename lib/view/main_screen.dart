@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/controller/cart_controller.dart';
 import 'package:get/get.dart';
 import 'package:furniture_app/view/account_screen.dart';
 import 'package:furniture_app/view/cart_screen.dart';
@@ -14,12 +15,14 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     RxInt currentScreenIndex = RxInt(0);
+    final CartController cartController = Get.put(CartController());
 
     return Scaffold(
       backgroundColor: COLORS.bg,
       //bottom navigation
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: bottomNav(currentScreenIndex),
+      floatingActionButton:
+          bottomNav(currentScreenIndex, cartController.totalAmount),
       body: Obx(
         () => IndexedStack(
           index: currentScreenIndex.value,
