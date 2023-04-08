@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:furniture_app/controller/cart_controller.dart';
+import 'package:furniture_app/controller/favorite_controller.dart';
+import 'package:furniture_app/controller/products_controller.dart';
 import 'package:furniture_app/models/cart_product_model.dart';
+import 'package:furniture_app/models/product_model.dart';
 import 'package:furniture_app/utils/convert_hex.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +26,7 @@ class DetailsScreen extends StatelessWidget {
       Get.put(DetailsProductController());
 
   final CartController cartController = Get.put(CartController());
+  final FavoriteController favoriteController = Get.put(FavoriteController());
 
   final PageController _indicatorController = PageController();
 
@@ -173,10 +177,16 @@ class DetailsScreen extends StatelessWidget {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    print(
-                                      detailsProductController
-                                          .detailsProduct.value.id,
-                                    );
+                                    var products =
+                                        Get.find<ProductsController>().products;
+                                    var findProduct = products.firstWhere(
+                                        (item) =>
+                                            item.id ==
+                                            detailsProductController
+                                                .detailsProduct.value.id);
+
+                                    favoriteController
+                                        .toggleFavorite(findProduct);
                                   },
                                   child: Container(
                                     width: 50,
@@ -185,10 +195,20 @@ class DetailsScreen extends StatelessWidget {
                                       color: COLORS.lightGrey,
                                       borderRadius: BorderRadius.circular(50),
                                     ),
-                                    child: const Icon(
-                                      CupertinoIcons.heart_solid,
-                                      size: 24,
-                                      color: COLORS.grey,
+                                    child: Obx(
+                                      () => Icon(
+                                        CupertinoIcons.heart_solid,
+                                        size: 24,
+                                        color: favoriteController.favoriteList
+                                                .any((item) =>
+                                                    item.id ==
+                                                    detailsProductController
+                                                        .detailsProduct
+                                                        .value
+                                                        .id)
+                                            ? Colors.red
+                                            : COLORS.grey,
+                                      ),
                                     ),
                                   ),
                                 ),

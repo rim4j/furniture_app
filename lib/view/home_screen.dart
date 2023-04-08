@@ -7,6 +7,7 @@ import 'package:furniture_app/config/app_styles.dart';
 import 'package:furniture_app/constants/icons_data.dart';
 import 'package:furniture_app/constants/images.dart';
 import 'package:furniture_app/controller/details_product_controller.dart';
+import 'package:furniture_app/controller/favorite_controller.dart';
 import 'package:furniture_app/controller/filter_controller.dart';
 import 'package:furniture_app/controller/products_controller.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,7 @@ class HomeScreen extends StatelessWidget {
   final FilterController filterController = Get.put(FilterController());
   final DetailsProductController detailsProductController =
       Get.put(DetailsProductController());
+  final FavoriteController favoriteController = Get.put(FavoriteController());
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +246,11 @@ class HomeScreen extends StatelessWidget {
                                     top: 10,
                                     right: 10,
                                     child: GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        favoriteController.toggleFavorite(
+                                          productsController.products[index],
+                                        );
+                                      },
                                       child: Container(
                                         width: 30,
                                         height: 30,
@@ -253,11 +259,17 @@ class HomeScreen extends StatelessWidget {
                                               BorderRadius.circular(40),
                                           color: COLORS.dark,
                                         ),
-                                        child: const Icon(
-                                          CupertinoIcons.heart_solid,
-                                          size: 18,
-                                          color: COLORS.lightGrey,
-                                          // color: Colors.red,
+                                        child: Obx(
+                                          () => Icon(
+                                            CupertinoIcons.heart_solid,
+                                            size: 18,
+                                            color: favoriteController
+                                                    .favoriteList
+                                                    .contains(productsController
+                                                        .products[index])
+                                                ? Colors.red
+                                                : COLORS.lightGrey,
+                                          ),
                                         ),
                                       ),
                                     ),

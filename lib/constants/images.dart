@@ -31,4 +31,5 @@ class ANIMATIONS {
   static const onboarding2 = "assets/animations/onboarding2.json";
   static const onboarding3 = "assets/animations/onboarding3.json";
   static const emptyCart = "assets/animations/emptyCart.json";
+  static const favorite = "assets/animations/favorite.json";
 }
