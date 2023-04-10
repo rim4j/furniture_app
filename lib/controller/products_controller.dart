@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 class ProductsController extends GetxController {
   RxList<ProductModel> products = RxList();
-  //  var productList = <ProductModel>[].obs;
   RxList<String> category = RxList();
   RxBool loading = false.obs;
 

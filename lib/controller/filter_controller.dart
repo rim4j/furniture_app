@@ -4,8 +4,18 @@ import 'package:get/get.dart';
 
 class FilterController extends GetxController {
   RxString categorySelected = RxString("all products");
+  RxString searchText = RxString("");
   RxList<ProductModel> filteredProducts = RxList();
   RxList<ProductModel> allProducts = RxList();
+
+  void searchProducts(String text) {
+    searchText.value = text;
+    List<ProductModel> searchList = allProducts
+        .where((item) => item.name!.toLowerCase().contains(text.toLowerCase()))
+        .toList();
+
+    filteredProducts.value = searchList.obs;
+  }
 
   void filterByCategory(String category) {
     categorySelected.value = category;
