@@ -7,17 +7,6 @@ class FilterController extends GetxController {
   RxList<ProductModel> filteredProducts = RxList();
   RxList<ProductModel> allProducts = RxList();
 
-  @override
-  onInit() {
-    super.onInit();
-    initFilterProducts();
-  }
-
-  initFilterProducts() {
-    filteredProducts = Get.find<ProductsController>().products;
-    allProducts = Get.find<ProductsController>().products;
-  }
-
   void filterByCategory(String category) {
     categorySelected.value = category;
 
