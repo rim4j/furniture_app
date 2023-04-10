@@ -23,12 +23,9 @@ class ProductsController extends GetxController {
       if (response.statusCode == 200) {
         response.data
             .forEach((item) => products.add(ProductModel.fromJson(item)));
-        response.data.forEach((item) => Get.find<FilterController>()
-            .allProducts
-            .add(ProductModel.fromJson(item)));
-        response.data.forEach((item) => Get.find<FilterController>()
-            .filteredProducts
-            .add(ProductModel.fromJson(item)));
+
+        Get.find<FilterController>().allProducts.value = products;
+        Get.find<FilterController>().filteredProducts.value = products;
 
         category.add("all products");
         for (var item in products) {

@@ -11,7 +11,7 @@ class FilterController extends GetxController {
     categorySelected.value = category;
 
     if (category == "all products") {
-      filteredProducts.value = Get.find<ProductsController>().products;
+      filteredProducts.value = allProducts;
     } else {
       List<ProductModel> filterList =
           allProducts.where((item) => item.category == category).toList();
