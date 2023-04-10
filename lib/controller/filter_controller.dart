@@ -1,5 +1,33 @@
+import 'package:furniture_app/controller/products_controller.dart';
+import 'package:furniture_app/models/product_model.dart';
 import 'package:get/get.dart';
 
 class FilterController extends GetxController {
   RxString categorySelected = RxString("all products");
+  RxList<ProductModel> filteredProducts = RxList();
+  RxList<ProductModel> allProducts = RxList();
+
+  @override
+  onInit() {
+    super.onInit();
+    initFilterProducts();
+  }
+
+  initFilterProducts() {
+    filteredProducts = Get.find<ProductsController>().products;
+    allProducts = Get.find<ProductsController>().products;
+  }
+
+  void filterByCategory(String category) {
+    categorySelected.value = category;
+
+    if (category == "all products") {
+      filteredProducts.value = Get.find<ProductsController>().products;
+    } else {
+      List<ProductModel> filterList =
+          allProducts.where((item) => item.category == category).toList();
+
+      filteredProducts.value = filterList.obs;
+    }
+  }
 }

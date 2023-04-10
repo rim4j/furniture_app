@@ -139,8 +139,11 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            filterController.categorySelected.value =
-                                productsController.category[index].toString();
+                            // filterController.categorySelected.value =
+                            //     productsController.category[index].toString();
+
+                            filterController.filterByCategory(
+                                productsController.category[index].toString());
                           },
                           child: Obx(
                             () => Container(
@@ -201,6 +204,8 @@ class HomeScreen extends StatelessWidget {
 
                   //!list
                   const SizedBox(height: 32),
+
+                  //!filter controller
                   Obx(
                     () => MasonryGridView.count(
                       shrinkWrap: true,
@@ -208,12 +213,12 @@ class HomeScreen extends StatelessWidget {
                       mainAxisSpacing: 30,
                       crossAxisCount: 2,
                       physics: const BouncingScrollPhysics(),
-                      itemCount: productsController.products.length,
+                      itemCount: filterController.filteredProducts.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
                             detailsProductController.getDetailsProduct(
-                                productsController.products[index].id!);
+                                filterController.filteredProducts[index].id!);
                           },
                           child: Column(
                             children: [
@@ -223,8 +228,8 @@ class HomeScreen extends StatelessWidget {
                                     width: Get.width / 2.5,
                                     height: Get.height / 4,
                                     child: CachedNetworkImage(
-                                      imageUrl: productsController
-                                          .products[index].image!,
+                                      imageUrl: filterController
+                                          .filteredProducts[index].image!,
                                       imageBuilder: (context, imageProvider) =>
                                           Container(
                                         decoration: BoxDecoration(
@@ -248,7 +253,8 @@ class HomeScreen extends StatelessWidget {
                                     child: GestureDetector(
                                       onTap: () {
                                         favoriteController.toggleFavorite(
-                                          productsController.products[index],
+                                          filterController
+                                              .filteredProducts[index],
                                         );
                                       },
                                       child: Container(
@@ -265,8 +271,9 @@ class HomeScreen extends StatelessWidget {
                                             size: 18,
                                             color: favoriteController
                                                     .favoriteList
-                                                    .contains(productsController
-                                                        .products[index])
+                                                    .contains(filterController
+                                                            .filteredProducts[
+                                                        index])
                                                 ? Colors.red
                                                 : COLORS.lightGrey,
                                           ),
@@ -283,13 +290,14 @@ class HomeScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      productsController.products[index].name!,
+                                      filterController
+                                          .filteredProducts[index].name!,
                                       textAlign: TextAlign.start,
                                       style: fEncodeSansBold,
                                     ),
                                     Text(
-                                      productsController
-                                          .products[index].category!,
+                                      filterController
+                                          .filteredProducts[index].category!,
                                       textAlign: TextAlign.start,
                                       style: fEncodeSansMedium.copyWith(
                                         color: COLORS.grey,
@@ -305,8 +313,8 @@ class HomeScreen extends StatelessWidget {
                                       children: [
                                         Text(
                                           "\$${NumberFormat().format(
-                                            productsController
-                                                .products[index].price!,
+                                            filterController
+                                                .filteredProducts[index].price!,
                                           )}",
                                           style: fEncodeSansBold,
                                         ),
@@ -322,6 +330,129 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: Get.height / 7),
+
+                  //!products controller
+                  // Obx(
+                  //   () => MasonryGridView.count(
+                  //     shrinkWrap: true,
+                  //     crossAxisSpacing: 0,
+                  //     mainAxisSpacing: 30,
+                  //     crossAxisCount: 2,
+                  //     physics: const BouncingScrollPhysics(),
+                  //     itemCount: productsController.products.length,
+                  //     itemBuilder: (context, index) {
+                  //       return GestureDetector(
+                  //         onTap: () {
+                  //           detailsProductController.getDetailsProduct(
+                  //               productsController.products[index].id!);
+                  //         },
+                  //         child: Column(
+                  //           children: [
+                  //             Stack(
+                  //               children: [
+                  //                 SizedBox(
+                  //                   width: Get.width / 2.5,
+                  //                   height: Get.height / 4,
+                  //                   child: CachedNetworkImage(
+                  //                     imageUrl: productsController
+                  //                         .products[index].image!,
+                  //                     imageBuilder: (context, imageProvider) =>
+                  //                         Container(
+                  //                       decoration: BoxDecoration(
+                  //                         borderRadius:
+                  //                             BorderRadius.circular(12),
+                  //                         image: DecorationImage(
+                  //                           image: imageProvider,
+                  //                           fit: BoxFit.cover,
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                     placeholder: (context, url) =>
+                  //                         Lottie.asset(ANIMATIONS.loading),
+                  //                     errorWidget: (context, url, error) =>
+                  //                         const Icon(Icons.error),
+                  //                   ),
+                  //                 ),
+                  //                 Positioned(
+                  //                   top: 10,
+                  //                   right: 10,
+                  //                   child: GestureDetector(
+                  //                     onTap: () {
+                  //                       favoriteController.toggleFavorite(
+                  //                         productsController.products[index],
+                  //                       );
+                  //                     },
+                  //                     child: Container(
+                  //                       width: 30,
+                  //                       height: 30,
+                  //                       decoration: BoxDecoration(
+                  //                         borderRadius:
+                  //                             BorderRadius.circular(40),
+                  //                         color: COLORS.dark,
+                  //                       ),
+                  //                       child: Obx(
+                  //                         () => Icon(
+                  //                           CupertinoIcons.heart_solid,
+                  //                           size: 18,
+                  //                           color: favoriteController
+                  //                                   .favoriteList
+                  //                                   .contains(productsController
+                  //                                       .products[index])
+                  //                               ? Colors.red
+                  //                               : COLORS.lightGrey,
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 )
+                  //               ],
+                  //             ),
+                  //             const SizedBox(height: 10),
+                  //             SizedBox(
+                  //               width: Get.width / 2.5,
+                  //               child: Column(
+                  //                 crossAxisAlignment: CrossAxisAlignment.start,
+                  //                 children: [
+                  //                   Text(
+                  //                     productsController.products[index].name!,
+                  //                     textAlign: TextAlign.start,
+                  //                     style: fEncodeSansBold,
+                  //                   ),
+                  //                   Text(
+                  //                     productsController
+                  //                         .products[index].category!,
+                  //                     textAlign: TextAlign.start,
+                  //                     style: fEncodeSansMedium.copyWith(
+                  //                       color: COLORS.grey,
+                  //                       fontSize: 10,
+                  //                     ),
+                  //                   ),
+                  //                   const SizedBox(height: 10),
+                  //                   Row(
+                  //                     mainAxisAlignment:
+                  //                         MainAxisAlignment.spaceBetween,
+                  //                     crossAxisAlignment:
+                  //                         CrossAxisAlignment.center,
+                  //                     children: [
+                  //                       Text(
+                  //                         "\$${NumberFormat().format(
+                  //                           productsController
+                  //                               .products[index].price!,
+                  //                         )}",
+                  //                         style: fEncodeSansBold,
+                  //                       ),
+                  //                     ],
+                  //                   )
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
+                  // SizedBox(height: Get.height / 7),
                 ],
               )
             : Center(
