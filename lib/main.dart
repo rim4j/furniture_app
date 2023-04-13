@@ -8,8 +8,11 @@ import 'package:get/route_manager.dart';
 void main() {
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    systemNavigationBarColor: COLORS.grey,
-    statusBarColor: COLORS.grey,
+    // systemNavigationBarColor: COLORS.grey,
+    // statusBarColor: COLORS.grey,
+    systemNavigationBarColor: Colors.transparent,
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
   ));
 }
 

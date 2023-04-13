@@ -48,6 +48,7 @@ dependencies:
   readmore: ^2.2.0
   flutter_slidable: ^2.0.0
   collection: ^1.17.0
+  sliding_sheet: ^0.5.2
 
 dev_dependencies:
   flutter_test:

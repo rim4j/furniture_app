@@ -33,4 +33,6 @@ class ANIMATIONS {
   static const emptyCart = "assets/animations/emptyCart.json";
   static const favorite = "assets/animations/favorite.json";
   static const notFound = "assets/animations/notFound.json";
+  static const checkMark = "assets/animations/checkmark.json";
+  static const lightCheckMark = "assets/animations/light-checkmark.json";
 }

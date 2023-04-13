@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:furniture_app/config/app_styles.dart';
+import 'package:furniture_app/constants/data_list.dart';
 import 'package:furniture_app/constants/icons_data.dart';
 import 'package:furniture_app/constants/images.dart';
 import 'package:furniture_app/controller/details_product_controller.dart';
@@ -13,6 +14,9 @@ import 'package:furniture_app/controller/products_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
+
+import '../utils/convert_hex.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -23,14 +27,343 @@ class HomeScreen extends StatelessWidget {
       Get.put(DetailsProductController());
   final FavoriteController favoriteController = Get.put(FavoriteController());
 
+  final RxDouble price = RxDouble(0.0);
+
   @override
   Widget build(BuildContext context) {
+    //bottom sheet
+    void showAsBottomSheet() async {
+      await showSlidingBottomSheet(context, builder: (context) {
+        return SlidingSheetDialog(
+          elevation: 8,
+          cornerRadius: 20,
+          avoidStatusBar: true,
+          snapSpec: const SnapSpec(
+            snap: true,
+            snappings: [0.4, 0.8, 1.0],
+            positioning: SnapPositioning.relativeToAvailableSpace,
+          ),
+          headerBuilder: (context, state) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Container(
+                  width: 50,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: COLORS.grey,
+                    borderRadius: BorderRadius.circular(500),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          builder: (context, state) {
+            return SizedBox(
+                width: Get.width,
+                child: Material(
+                  color: COLORS.bg,
+                  child: ListView(
+                    shrinkWrap: true,
+                    primary: false,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "price",
+                              style: fEncodeSansMedium.copyWith(
+                                fontSize: 18,
+                                color: COLORS.dark,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            Obx(
+                              () => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Slider(
+                                    activeColor: COLORS.dark,
+                                    inactiveColor: COLORS.lightGrey,
+                                    value: filterController.selectedPrice.value,
+                                    min: filterController.minPrice.value,
+                                    max: filterController.maxPrice.value,
+                                    onChanged: (double value) {
+                                      filterController.selectedPrice.value =
+                                          value;
+                                    },
+                                  ),
+                                  Text(
+                                    "\$${NumberFormat().format(filterController.selectedPrice.value)}",
+                                    style: fEncodeSansRegular.copyWith(
+                                      color: COLORS.dark,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            //sort by name and price
+
+                            Text(
+                              "sort by",
+                              style: fEncodeSansMedium.copyWith(
+                                fontSize: 18,
+                                color: COLORS.dark,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            SizedBox(
+                              width: Get.width,
+                              height: 200,
+                              child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: filterController
+                                    .sortByNameAndPriceList.length,
+                                itemBuilder: (context, index) {
+                                  final item = filterController
+                                      .sortByNameAndPriceList[index];
+                                  return Obx(
+                                    () => InkWell(
+                                      onTap: () {
+                                        filterController
+                                            .filterByNameAndPriceSelected
+                                            .value = item.value!;
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                border: Border.all(
+                                                  color: COLORS.grey,
+                                                ),
+                                              ),
+                                              child: filterController
+                                                          .filterByNameAndPriceSelected
+                                                          .value ==
+                                                      item.value
+                                                  ? Center(
+                                                      child: Lottie.asset(
+                                                        repeat: false,
+                                                        ANIMATIONS.checkMark,
+                                                      ),
+                                                    )
+                                                  : const SizedBox(),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 20),
+                                          Text(
+                                            item.title!,
+                                            style: fEncodeSansRegular,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+                            //sort by company
+
+                            Text(
+                              "company",
+                              style: fEncodeSansMedium.copyWith(
+                                fontSize: 18,
+                                color: COLORS.dark,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            SizedBox(
+                              width: Get.width,
+                              height: 50,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: filterController.companyList.length,
+                                itemBuilder: (context, index) {
+                                  final company =
+                                      filterController.companyList[index];
+                                  final companySelected =
+                                      filterController.companySelected;
+
+                                  return Obx(
+                                    () => GestureDetector(
+                                      onTap: () {
+                                        filterController.companySelected.value =
+                                            company;
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                companySelected.value == company
+                                                    ? COLORS.dark
+                                                    : COLORS.lightGrey,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              company,
+                                              style:
+                                                  fEncodeSansRegular.copyWith(
+                                                color: companySelected.value ==
+                                                        company
+                                                    ? COLORS.lightGrey
+                                                    : COLORS.dark,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
+                            //sort by colors
+
+                            Text(
+                              "colors",
+                              style: fEncodeSansMedium.copyWith(
+                                fontSize: 18,
+                                color: COLORS.dark,
+                              ),
+                            ),
+
+                            SizedBox(
+                              width: Get.width,
+                              height: 80,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: filterController.colorList.length,
+                                itemBuilder: (context, index) {
+                                  //convert to hex
+                                  Color colorItem = HexColor(
+                                    filterController.colorList[index],
+                                  );
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Obx(
+                                      () => GestureDetector(
+                                        onTap: () {
+                                          filterController.colorSelected.value =
+                                              filterController.colorList[index];
+                                        },
+                                        child: Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: colorItem,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: filterController
+                                                      .colorSelected.value ==
+                                                  filterController
+                                                      .colorList[index]
+                                              ? Center(
+                                                  child: Lottie.asset(
+                                                    ANIMATIONS.lightCheckMark,
+                                                    repeat: false,
+                                                  ),
+                                                )
+                                              : const SizedBox(),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+
+                            const SizedBox(height: 10),
+                            // buttons
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        filterController.clearFilter();
+                                        Get.back();
+                                      },
+                                      child: Text(
+                                        "clear",
+                                        style: fEncodeSansBold,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          backgroundColor: COLORS.dark,
+                                        ),
+                                        child: Text(
+                                          "done",
+                                          style: fEncodeSansBold,
+                                        ),
+                                        onPressed: () {
+                                          filterController
+                                              .filterInBottomSheet();
+                                          Get.back();
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ));
+          },
+        );
+      });
+    }
+    //end bottom sheet
+
     return SafeArea(
       child: Obx(
         () => productsController.loading.value == false
             ? ListView(
                 physics: const BouncingScrollPhysics(),
                 children: [
+                  //!header
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
@@ -112,7 +445,9 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 16),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            showAsBottomSheet();
+                          },
                           child: Container(
                             width: 49,
                             height: 49,
@@ -273,7 +608,15 @@ class HomeScreen extends StatelessWidget {
                                               ),
                                               child: Obx(
                                                 () => Icon(
-                                                  CupertinoIcons.heart_solid,
+                                                  favoriteController
+                                                          .favoriteList
+                                                          .contains(filterController
+                                                                  .filteredProducts[
+                                                              index])
+                                                      ? CupertinoIcons
+                                                          .heart_solid
+                                                      : CupertinoIcons
+                                                          .suit_heart,
                                                   size: 18,
                                                   color: favoriteController
                                                           .favoriteList
