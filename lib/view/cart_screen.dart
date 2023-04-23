@@ -28,9 +28,11 @@ class CartScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: COLORS.bg,
           elevation: 0,
+          centerTitle: true,
           title: Text(
             'checkout',
-            style: fEncodeSansBold.copyWith(fontSize: 20, color: COLORS.dark),
+            style: fEncodeSansBold.copyWith(
+                fontSize: largeFontSize, color: COLORS.dark),
           ),
         ),
         body: SingleChildScrollView(
@@ -111,7 +113,7 @@ class CartScreen extends StatelessWidget {
                                                       .cartList[index].name!,
                                                   style:
                                                       fEncodeSansBold.copyWith(
-                                                    fontSize: 16,
+                                                    fontSize: smallFontSize,
                                                   ),
                                                 ),
                                                 const SizedBox(height: 5),
@@ -120,15 +122,17 @@ class CartScreen extends StatelessWidget {
                                                       .category!,
                                                   style: fEncodeSansMedium
                                                       .copyWith(
-                                                    fontSize: 14,
+                                                    fontSize: verySmallFontSize,
                                                     color: COLORS.grey,
                                                   ),
                                                 ),
                                                 const SizedBox(height: 5),
                                                 Text(
                                                   "\$${NumberFormat().format(cartController.cartList[index].price)}",
-                                                  style: fEncodeSansBold
-                                                      .copyWith(fontSize: 16),
+                                                  style:
+                                                      fEncodeSansBold.copyWith(
+                                                          fontSize:
+                                                              smallFontSize),
                                                 ),
                                                 const SizedBox(height: 5),
                                                 Container(
@@ -178,8 +182,10 @@ class CartScreen extends StatelessWidget {
                                                   cartController
                                                       .cartList[index].amount
                                                       .toString(),
-                                                  style: fEncodeSansBold
-                                                      .copyWith(fontSize: 20),
+                                                  style:
+                                                      fEncodeSansBold.copyWith(
+                                                          fontSize:
+                                                              smallFontSize),
                                                 )),
                                               ),
                                               GestureDetector(
@@ -227,7 +233,8 @@ class CartScreen extends StatelessWidget {
                             const SizedBox(height: 20),
                             Text(
                               "shipping information",
-                              style: fEncodeSansSemibold.copyWith(fontSize: 18),
+                              style: fEncodeSansSemibold.copyWith(
+                                  fontSize: mediumFontSize),
                             ),
                             const SizedBox(height: 10),
                             Row(
@@ -236,7 +243,7 @@ class CartScreen extends StatelessWidget {
                                   child: Text(
                                     "total price : ",
                                     style: fEncodeSansSemibold.copyWith(
-                                      fontSize: 18,
+                                      fontSize: mediumFontSize,
                                       color: COLORS.grey,
                                     ),
                                   ),
@@ -244,7 +251,7 @@ class CartScreen extends StatelessWidget {
                                 Text(
                                   "\$${NumberFormat().format(cartController.totalPrice.value)}",
                                   style: fEncodeSansSemibold.copyWith(
-                                    fontSize: 18,
+                                    fontSize: mediumFontSize,
                                     color: COLORS.grey,
                                   ),
                                 ),
@@ -257,7 +264,7 @@ class CartScreen extends StatelessWidget {
                                   child: Text(
                                     "total amount : ",
                                     style: fEncodeSansSemibold.copyWith(
-                                      fontSize: 18,
+                                      fontSize: mediumFontSize,
                                       color: COLORS.grey,
                                     ),
                                   ),
@@ -265,7 +272,7 @@ class CartScreen extends StatelessWidget {
                                 Text(
                                   "${cartController.totalAmount}",
                                   style: fEncodeSansSemibold.copyWith(
-                                    fontSize: 18,
+                                    fontSize: mediumFontSize,
                                     color: COLORS.grey,
                                   ),
                                 ),

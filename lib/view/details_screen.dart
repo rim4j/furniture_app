@@ -7,7 +7,6 @@ import 'package:furniture_app/controller/cart_controller.dart';
 import 'package:furniture_app/controller/favorite_controller.dart';
 import 'package:furniture_app/controller/products_controller.dart';
 import 'package:furniture_app/models/cart_product_model.dart';
-import 'package:furniture_app/models/product_model.dart';
 import 'package:furniture_app/utils/convert_hex.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -89,7 +88,7 @@ class DetailsScreen extends StatelessWidget {
                       Text(
                         "add to cart |",
                         style: fEncodeSansBold.copyWith(
-                          fontSize: 18,
+                          fontSize: mediumFontSize,
                           color: COLORS.lightGrey,
                         ),
                       ),
@@ -97,7 +96,7 @@ class DetailsScreen extends StatelessWidget {
                       Text(
                         "\$${NumberFormat().format(detailsProductController.detailsProduct.value.price)}",
                         style: fEncodeSansBold.copyWith(
-                          fontSize: 18,
+                          fontSize: mediumFontSize,
                           color: COLORS.lightGrey,
                         ),
                       )
@@ -246,7 +245,8 @@ class DetailsScreen extends StatelessWidget {
                                   .detailsProduct.value.name!,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: fEncodeSansBold.copyWith(fontSize: 24),
+                              style: fEncodeSansBold.copyWith(
+                                  fontSize: largeFontSize),
                             ),
                           ),
                           Row(
@@ -257,6 +257,7 @@ class DetailsScreen extends StatelessWidget {
                                     Text(
                                       "out of stock",
                                       style: fEncodeSansRegular.copyWith(
+                                        fontSize: mediumFontSize,
                                         color: Colors.red,
                                       ),
                                     ),
@@ -294,7 +295,7 @@ class DetailsScreen extends StatelessWidget {
                                           child: Text(
                                         count.value.toString(),
                                         style: fEncodeSansBold.copyWith(
-                                            fontSize: 20),
+                                            fontSize: smallFontSize),
                                       )),
                                     ),
                                     GestureDetector(
@@ -358,14 +359,17 @@ class DetailsScreen extends StatelessWidget {
                           Text(
                             "${detailsProductController.detailsProduct.value.stars}",
                             style: fEncodeSansRegular.copyWith(
+                              fontSize: verySmallFontSize,
                               color: COLORS.grey,
                             ),
                           ),
                           const SizedBox(width: 5),
                           Text(
                             "(reviews ${detailsProductController.detailsProduct.value.reviews})",
-                            style:
-                                fEncodeSansRegular.copyWith(color: COLORS.grey),
+                            style: fEncodeSansRegular.copyWith(
+                              color: COLORS.grey,
+                              fontSize: verySmallFontSize,
+                            ),
                           )
                         ],
                       ),
@@ -393,10 +397,11 @@ class DetailsScreen extends StatelessWidget {
                           Row(
                             children: [
                               SizedBox(
-                                width: 80,
+                                width: Get.width / 4,
                                 child: Text(
                                   "available:",
-                                  style: fEncodeSansBold.copyWith(fontSize: 16),
+                                  style: fEncodeSansBold.copyWith(
+                                      fontSize: mediumFontSize),
                                 ),
                               ),
                               Text(
@@ -405,8 +410,8 @@ class DetailsScreen extends StatelessWidget {
                                         0
                                     ? "out of stock"
                                     : "in stock",
-                                style:
-                                    fEncodeSansRegular.copyWith(fontSize: 16),
+                                style: fEncodeSansRegular.copyWith(
+                                    fontSize: smallFontSize),
                               ),
                             ],
                           ),
@@ -414,17 +419,18 @@ class DetailsScreen extends StatelessWidget {
                           Row(
                             children: [
                               SizedBox(
-                                width: 80,
+                                width: Get.width / 4,
                                 child: Text(
                                   "SKU:",
-                                  style: fEncodeSansBold.copyWith(fontSize: 16),
+                                  style: fEncodeSansBold.copyWith(
+                                      fontSize: mediumFontSize),
                                 ),
                               ),
                               Text(
                                 detailsProductController
                                     .detailsProduct.value.id!,
-                                style:
-                                    fEncodeSansRegular.copyWith(fontSize: 16),
+                                style: fEncodeSansRegular.copyWith(
+                                    fontSize: smallFontSize),
                               ),
                             ],
                           ),
@@ -432,17 +438,18 @@ class DetailsScreen extends StatelessWidget {
                           Row(
                             children: [
                               SizedBox(
-                                width: 80,
+                                width: Get.width / 4,
                                 child: Text(
                                   "brand:",
-                                  style: fEncodeSansBold.copyWith(fontSize: 16),
+                                  style: fEncodeSansBold.copyWith(
+                                      fontSize: mediumFontSize),
                                 ),
                               ),
                               Text(
                                 detailsProductController
                                     .detailsProduct.value.company!,
-                                style:
-                                    fEncodeSansRegular.copyWith(fontSize: 16),
+                                style: fEncodeSansRegular.copyWith(
+                                    fontSize: smallFontSize),
                               ),
                             ],
                           ),
@@ -480,11 +487,9 @@ class DetailsScreen extends StatelessWidget {
                                               shape: BoxShape.circle,
                                             ),
                                             child: selectedColorIndex == index
-                                                ? const Icon(
-                                                    CupertinoIcons
-                                                        .check_mark_circled,
-                                                    color: COLORS.lightGrey,
-                                                  )
+                                                ? Lottie.asset(
+                                                    repeat: false,
+                                                    ANIMATIONS.lightCheckMark)
                                                 : const SizedBox(),
                                           )
                                         : const SizedBox(),

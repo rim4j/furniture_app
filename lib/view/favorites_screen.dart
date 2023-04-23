@@ -26,9 +26,11 @@ class FavoritesScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: COLORS.bg,
           elevation: 0,
+          centerTitle: true,
           title: Text(
             'favorites',
-            style: fEncodeSansBold.copyWith(fontSize: 20, color: COLORS.dark),
+            style: fEncodeSansBold.copyWith(
+                fontSize: mediumFontSize, color: COLORS.dark),
           ),
         ),
         body: Obx(

@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class COLORS {
@@ -14,6 +14,15 @@ final fInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(12),
   borderSide: const BorderSide(color: COLORS.lightGrey),
 );
+
+final blockSizeHorizontal = Get.width / 100;
+final blockSizeVertical = Get.height / 100;
+
+final veryLargeFontSize = blockSizeHorizontal * 4.5;
+final largeFontSize = blockSizeHorizontal * 4;
+final mediumFontSize = blockSizeHorizontal * 3.5;
+final smallFontSize = blockSizeHorizontal * 3;
+final verySmallFontSize = blockSizeHorizontal * 2.5;
 
 final fEncodeSansBold = GoogleFonts.encodeSans(fontWeight: FontWeight.w700);
 final fEncodeSansSemibold = GoogleFonts.encodeSans(fontWeight: FontWeight.w600);

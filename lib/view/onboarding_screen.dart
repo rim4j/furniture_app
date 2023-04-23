@@ -20,6 +20,7 @@ class OnboardingScreen extends StatelessWidget {
         () => Stack(
           children: [
             PageView(
+              physics: const BouncingScrollPhysics(),
               controller: _controller,
               onPageChanged: (index) {
                 onLastPage.value = (index == 2);
@@ -44,7 +45,7 @@ class OnboardingScreen extends StatelessWidget {
                             "Welcome to the furniture app",
                             textAlign: TextAlign.center,
                             style: fEncodeSansSemibold.copyWith(
-                              fontSize: 24,
+                              fontSize: veryLargeFontSize,
                             ),
                           ),
                         ),
@@ -71,7 +72,7 @@ class OnboardingScreen extends StatelessWidget {
                             "Easy and fast ordering and immediate delivery of goods",
                             textAlign: TextAlign.center,
                             style: fEncodeSansSemibold.copyWith(
-                              fontSize: 24,
+                              fontSize: veryLargeFontSize,
                             ),
                           ),
                         ),
@@ -96,7 +97,9 @@ class OnboardingScreen extends StatelessWidget {
                         child: Text(
                           "Buy quality products from us",
                           textAlign: TextAlign.center,
-                          style: fEncodeSansSemibold.copyWith(fontSize: 24),
+                          style: fEncodeSansSemibold.copyWith(
+                            fontSize: veryLargeFontSize,
+                          ),
                         ),
                       ),
                     ],
@@ -112,14 +115,17 @@ class OnboardingScreen extends StatelessWidget {
                 children: [
                   //skip
                   SizedBox(
-                    width: 35,
+                    width: Get.width / 9,
                     child: GestureDetector(
                       onTap: () {
                         _controller.jumpToPage(2);
                       },
                       child: Text(
+                        textAlign: TextAlign.center,
                         "Skip",
-                        style: fEncodeSansMedium,
+                        style: fEncodeSansMedium.copyWith(
+                          fontSize: smallFontSize,
+                        ),
                       ),
                     ),
                   ),
@@ -135,7 +141,7 @@ class OnboardingScreen extends StatelessWidget {
 
                   //next or done
                   SizedBox(
-                    width: 35,
+                    width: Get.width / 9,
                     child: GestureDetector(
                       onTap: () {
                         if (!onLastPage.value) {
@@ -144,12 +150,15 @@ class OnboardingScreen extends StatelessWidget {
                             curve: Curves.easeOut,
                           );
                         } else {
-                          Get.off(() => MainScreen());
+                          Get.off(() => const MainScreen());
                         }
                       },
                       child: Text(
+                        textAlign: TextAlign.center,
                         !onLastPage.value ? "Next" : "Done",
-                        style: fEncodeSansMedium,
+                        style: fEncodeSansMedium.copyWith(
+                          fontSize: smallFontSize,
+                        ),
                       ),
                     ),
                   ),

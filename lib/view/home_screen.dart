@@ -68,23 +68,27 @@ class HomeScreen extends StatelessWidget {
                     shrinkWrap: true,
                     primary: false,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
                               "price",
                               style: fEncodeSansMedium.copyWith(
-                                fontSize: 18,
+                                fontSize: mediumFontSize,
                                 color: COLORS.dark,
                               ),
                             ),
-                            const SizedBox(height: 10),
+                          ),
+                          const SizedBox(height: 10),
 
-                            Obx(
-                              () => Column(
+                          Obx(
+                            () => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Slider(
@@ -102,27 +106,33 @@ class HomeScreen extends StatelessWidget {
                                     "\$${NumberFormat().format(filterController.selectedPrice.value)}",
                                     style: fEncodeSansRegular.copyWith(
                                       color: COLORS.dark,
-                                      fontSize: 16,
+                                      fontSize: mediumFontSize,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
+                          ),
 
-                            const SizedBox(height: 20),
+                          const SizedBox(height: 20),
 
-                            //sort by name and price
+                          //sort by name and price
 
-                            Text(
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
                               "sort by",
                               style: fEncodeSansMedium.copyWith(
-                                fontSize: 18,
+                                fontSize: mediumFontSize,
                                 color: COLORS.dark,
                               ),
                             ),
-                            const SizedBox(height: 10),
+                          ),
+                          const SizedBox(height: 10),
 
-                            SizedBox(
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: SizedBox(
                               width: Get.width,
                               height: 200,
                               child: ListView.builder(
@@ -169,7 +179,8 @@ class HomeScreen extends StatelessWidget {
                                           const SizedBox(height: 20),
                                           Text(
                                             item.title!,
-                                            style: fEncodeSansRegular,
+                                            style: fEncodeSansRegular.copyWith(
+                                                fontSize: smallFontSize),
                                           ),
                                         ],
                                       ),
@@ -178,175 +189,181 @@ class HomeScreen extends StatelessWidget {
                                 },
                               ),
                             ),
+                          ),
 
-                            const SizedBox(height: 20),
-                            //sort by company
+                          const SizedBox(height: 20),
+                          //sort by company
 
-                            Text(
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
                               "company",
                               style: fEncodeSansMedium.copyWith(
-                                fontSize: 18,
+                                fontSize: mediumFontSize,
                                 color: COLORS.dark,
                               ),
                             ),
-                            const SizedBox(height: 10),
+                          ),
+                          const SizedBox(height: 10),
 
-                            SizedBox(
-                              width: Get.width,
-                              height: 50,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: filterController.companyList.length,
-                                itemBuilder: (context, index) {
-                                  final company =
-                                      filterController.companyList[index];
-                                  final companySelected =
-                                      filterController.companySelected;
+                          SizedBox(
+                            width: Get.width,
+                            height: 50,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: filterController.companyList.length,
+                              itemBuilder: (context, index) {
+                                final company =
+                                    filterController.companyList[index];
+                                final companySelected =
+                                    filterController.companySelected;
 
-                                  return Obx(
-                                    () => GestureDetector(
-                                      onTap: () {
-                                        filterController.companySelected.value =
-                                            company;
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                            color:
-                                                companySelected.value == company
-                                                    ? COLORS.dark
-                                                    : COLORS.lightGrey,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              company,
-                                              style:
-                                                  fEncodeSansRegular.copyWith(
-                                                color: companySelected.value ==
-                                                        company
-                                                    ? COLORS.lightGrey
-                                                    : COLORS.dark,
-                                              ),
+                                return Obx(
+                                  () => GestureDetector(
+                                    onTap: () {
+                                      filterController.companySelected.value =
+                                          company;
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              companySelected.value == company
+                                                  ? COLORS.dark
+                                                  : COLORS.lightGrey,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            company,
+                                            style: fEncodeSansRegular.copyWith(
+                                              fontSize: smallFontSize,
+                                              color: companySelected.value ==
+                                                      company
+                                                  ? COLORS.lightGrey
+                                                  : COLORS.dark,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
+                                  ),
+                                );
+                              },
                             ),
+                          ),
 
-                            const SizedBox(height: 20),
-                            //sort by colors
+                          const SizedBox(height: 20),
+                          //sort by colors
 
-                            Text(
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Text(
                               "colors",
                               style: fEncodeSansMedium.copyWith(
-                                fontSize: 18,
+                                fontSize: mediumFontSize,
                                 color: COLORS.dark,
                               ),
                             ),
+                          ),
 
-                            SizedBox(
-                              width: Get.width,
-                              height: 80,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: filterController.colorList.length,
-                                itemBuilder: (context, index) {
-                                  //convert to hex
-                                  Color colorItem = HexColor(
-                                    filterController.colorList[index],
-                                  );
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Obx(
-                                      () => GestureDetector(
-                                        onTap: () {
-                                          filterController.colorSelected.value =
-                                              filterController.colorList[index];
-                                        },
-                                        child: Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: colorItem,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: filterController
-                                                      .colorSelected.value ==
-                                                  filterController
-                                                      .colorList[index]
-                                              ? Center(
-                                                  child: Lottie.asset(
-                                                    ANIMATIONS.lightCheckMark,
-                                                    repeat: false,
-                                                  ),
-                                                )
-                                              : const SizedBox(),
+                          SizedBox(
+                            width: Get.width,
+                            height: 80,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: filterController.colorList.length,
+                              itemBuilder: (context, index) {
+                                //convert to hex
+                                Color colorItem = HexColor(
+                                  filterController.colorList[index],
+                                );
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Obx(
+                                    () => GestureDetector(
+                                      onTap: () {
+                                        filterController.colorSelected.value =
+                                            filterController.colorList[index];
+                                      },
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: colorItem,
+                                          shape: BoxShape.circle,
                                         ),
+                                        child: filterController
+                                                    .colorSelected.value ==
+                                                filterController
+                                                    .colorList[index]
+                                            ? Center(
+                                                child: Lottie.asset(
+                                                  ANIMATIONS.lightCheckMark,
+                                                  repeat: false,
+                                                ),
+                                              )
+                                            : const SizedBox(),
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
+                                  ),
+                                );
+                              },
                             ),
+                          ),
 
-                            const SizedBox(height: 10),
-                            // buttons
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
+                          const SizedBox(height: 10),
+                          // buttons
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      filterController.clearFilter();
+                                      Get.back();
+                                    },
+                                    child: Text(
+                                      "clear",
+                                      style: fEncodeSansMedium.copyWith(
+                                          fontSize: smallFontSize),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
                                         ),
-                                        backgroundColor: Colors.red,
+                                        backgroundColor: COLORS.dark,
+                                      ),
+                                      child: Text(
+                                        "done",
+                                        style: fEncodeSansMedium.copyWith(
+                                            fontSize: smallFontSize),
                                       ),
                                       onPressed: () {
-                                        filterController.clearFilter();
+                                        filterController.filterInBottomSheet();
                                         Get.back();
-                                      },
-                                      child: Text(
-                                        "clear",
-                                        style: fEncodeSansBold,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                          ),
-                                          backgroundColor: COLORS.dark,
-                                        ),
-                                        child: Text(
-                                          "done",
-                                          style: fEncodeSansBold,
-                                        ),
-                                        onPressed: () {
-                                          filterController
-                                              .filterInBottomSheet();
-                                          Get.back();
-                                        }),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                                      }),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
@@ -360,329 +377,354 @@ class HomeScreen extends StatelessWidget {
     return SafeArea(
       child: Obx(
         () => productsController.loading.value == false
-            ? ListView(
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  //!header
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Image.asset(
-                              IMAGES.logo,
-                              scale: 8,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Hello, Welcome 👋",
-                                  style: fEncodeSansBold.copyWith(
-                                    color: COLORS.dark,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Text(
-                                  "John Doe",
-                                  style: fEncodeSansBold.copyWith(
-                                    color: COLORS.dark,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const CircleAvatar(
-                          radius: 20,
-                          backgroundImage: NetworkImage(
-                              "https://xsgames.co/randomusers/assets/avatars/male/74.jpg"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // !search field
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            style: fEncodeSansRegular.copyWith(
-                              color: COLORS.dark,
-                              fontSize: 14,
-                            ),
-                            onChanged: (value) {
-                              filterController.searchProducts(value);
-                            },
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 13),
-                              prefixIcon: const IconTheme(
-                                data: IconThemeData(color: COLORS.grey),
-                                child: Icon(Icons.search),
+            ? RefreshIndicator(
+                backgroundColor: COLORS.dark,
+                color: COLORS.lightGrey,
+                onRefresh: () async {
+                  productsController.products.clear();
+                  productsController.category.clear();
+                  productsController.getProducts();
+                },
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    //!header
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(
+                                IMAGES.logo,
+                                scale: 8,
                               ),
-                              hintText: "Search ...",
-                              border: fInputBorder,
-                              disabledBorder: fInputBorder,
-                              focusedBorder: fInputBorder,
-                              focusedErrorBorder: fInputBorder,
-                              enabledBorder: fInputBorder,
-                              hintStyle: fEncodeSansRegular.copyWith(
-                                  color: COLORS.grey, fontSize: 14),
-                              fillColor: COLORS.lightGrey,
-                              filled: true,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        GestureDetector(
-                          onTap: () {
-                            showAsBottomSheet();
-                          },
-                          child: Container(
-                            width: 49,
-                            height: 49,
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: COLORS.dark,
-                            ),
-                            child: SvgPicture.asset(ICONS.filter),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // !category
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: 36,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: productsController.category.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            filterController.filterByCategory(
-                                productsController.category[index].toString());
-                          },
-                          child: Obx(
-                            () => Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              margin: EdgeInsets.only(
-                                left: index == 0 ? 24 : 15,
-                                right: index ==
-                                        productsController.category.length - 1
-                                    ? 24
-                                    : 0,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color:
-                                    filterController.categorySelected.value ==
-                                            productsController.category[index]
-                                                .toString()
-                                        ? COLORS.dark
-                                        : COLORS.lightGrey,
-                              ),
-                              child: Row(
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SvgPicture.asset(
-                                    iconsList[index].icon!,
-                                    width: 25,
-                                    // ignore: deprecated_member_use
-                                    color: filterController
-                                                .categorySelected.value ==
-                                            productsController.category[index]
-                                        ? COLORS.lightGrey
-                                        : COLORS.dark,
+                                  Text(
+                                    "Hello, Welcome 👋",
+                                    style: fEncodeSansBold.copyWith(
+                                      color: COLORS.dark,
+                                      fontSize: smallFontSize,
+                                    ),
                                   ),
-                                  const SizedBox(width: 10),
-                                  Center(
-                                    child: Text(
-                                      productsController.category[index],
-                                      style: fEncodeSansRegular.copyWith(
-                                        fontSize: 14,
-                                        color: filterController
-                                                    .categorySelected.value ==
-                                                productsController
-                                                    .category[index]
-                                                    .toString()
-                                            ? COLORS.lightGrey
-                                            : COLORS.dark,
-                                      ),
+                                  Text(
+                                    "John Doe",
+                                    style: fEncodeSansBold.copyWith(
+                                      color: COLORS.dark,
+                                      fontSize: verySmallFontSize,
                                     ),
                                   ),
                                 ],
                               ),
+                            ],
+                          ),
+                          const CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(
+                                "https://xsgames.co/randomusers/assets/avatars/male/74.jpg"),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // !search field
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              style: fEncodeSansRegular.copyWith(
+                                color: COLORS.dark,
+                                fontSize: 14,
+                              ),
+                              onChanged: (value) {
+                                filterController.searchProducts(value);
+                              },
+                              decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 13),
+                                prefixIcon: const IconTheme(
+                                  data: IconThemeData(color: COLORS.grey),
+                                  child: Icon(Icons.search),
+                                ),
+                                hintText: "Search ...",
+                                border: fInputBorder,
+                                disabledBorder: fInputBorder,
+                                focusedBorder: fInputBorder,
+                                focusedErrorBorder: fInputBorder,
+                                enabledBorder: fInputBorder,
+                                hintStyle: fEncodeSansRegular.copyWith(
+                                    color: COLORS.grey,
+                                    fontSize: smallFontSize),
+                                fillColor: COLORS.lightGrey,
+                                filled: true,
+                              ),
                             ),
                           ),
-                        );
-                      },
+                          const SizedBox(width: 16),
+                          GestureDetector(
+                            onTap: () {
+                              showAsBottomSheet();
+                            },
+                            child: Container(
+                              width: 49,
+                              height: 49,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: COLORS.dark,
+                              ),
+                              child: SvgPicture.asset(ICONS.filter),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
 
-                  //!list
-                  const SizedBox(height: 32),
+                    const SizedBox(height: 24),
 
-                  //!filter controller
-                  Obx(
-                    () => filterController.filteredProducts.isEmpty
-                        ? Lottie.asset(ANIMATIONS.notFound)
-                        : MasonryGridView.count(
-                            shrinkWrap: true,
-                            crossAxisSpacing: 0,
-                            mainAxisSpacing: 30,
-                            crossAxisCount: 2,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: filterController.filteredProducts.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  detailsProductController.getDetailsProduct(
-                                      filterController
-                                          .filteredProducts[index].id!);
-                                },
-                                child: Column(
+                    // !category
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 36,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: productsController.category.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              filterController.filterByCategory(
+                                  productsController.category[index]
+                                      .toString());
+                            },
+                            child: Obx(
+                              () => Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                margin: EdgeInsets.only(
+                                  left: index == 0 ? 24 : 15,
+                                  right: index ==
+                                          productsController.category.length - 1
+                                      ? 24
+                                      : 0,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color:
+                                      filterController.categorySelected.value ==
+                                              productsController.category[index]
+                                                  .toString()
+                                          ? COLORS.dark
+                                          : COLORS.lightGrey,
+                                ),
+                                child: Row(
                                   children: [
-                                    Stack(
-                                      children: [
-                                        SizedBox(
-                                          width: Get.width / 2.5,
-                                          height: Get.height / 4,
-                                          child: CachedNetworkImage(
-                                            imageUrl: filterController
-                                                .filteredProducts[index].image!,
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                            placeholder: (context, url) =>
-                                                Lottie.asset(
-                                                    ANIMATIONS.loading),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 10,
-                                          right: 10,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              favoriteController.toggleFavorite(
-                                                filterController
-                                                    .filteredProducts[index],
-                                              );
-                                            },
-                                            child: Container(
-                                              width: 30,
-                                              height: 30,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(40),
-                                                color: COLORS.dark,
-                                              ),
-                                              child: Obx(
-                                                () => Icon(
-                                                  favoriteController
-                                                          .favoriteList
-                                                          .contains(filterController
-                                                                  .filteredProducts[
-                                                              index])
-                                                      ? CupertinoIcons
-                                                          .heart_solid
-                                                      : CupertinoIcons
-                                                          .suit_heart,
-                                                  size: 18,
-                                                  color: favoriteController
-                                                          .favoriteList
-                                                          .contains(filterController
-                                                                  .filteredProducts[
-                                                              index])
-                                                      ? Colors.red
-                                                      : COLORS.lightGrey,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                                    //category icon
+                                    SvgPicture.asset(
+                                      iconsList[index].icon!,
+                                      width: 25,
+                                      // ignore: deprecated_member_use
+                                      color: filterController
+                                                  .categorySelected.value ==
+                                              productsController.category[index]
+                                          ? COLORS.lightGrey
+                                          : COLORS.dark,
                                     ),
-                                    const SizedBox(height: 10),
-                                    SizedBox(
-                                      width: Get.width / 2.5,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            filterController
-                                                .filteredProducts[index].name!,
-                                            textAlign: TextAlign.start,
-                                            style: fEncodeSansBold,
-                                          ),
-                                          Text(
-                                            filterController
-                                                .filteredProducts[index]
-                                                .category!,
-                                            textAlign: TextAlign.start,
-                                            style: fEncodeSansMedium.copyWith(
-                                              color: COLORS.grey,
-                                              fontSize: 10,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "\$${NumberFormat().format(
-                                                  filterController
-                                                      .filteredProducts[index]
-                                                      .price!,
-                                                )}",
-                                                style: fEncodeSansBold,
-                                              ),
-                                            ],
-                                          )
-                                        ],
+                                    const SizedBox(width: 10),
+                                    //category title
+                                    Center(
+                                      child: Text(
+                                        productsController.category[index],
+                                        style: fEncodeSansRegular.copyWith(
+                                          fontSize: smallFontSize,
+                                          color: filterController
+                                                      .categorySelected.value ==
+                                                  productsController
+                                                      .category[index]
+                                                      .toString()
+                                              ? COLORS.lightGrey
+                                              : COLORS.dark,
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              );
-                            },
-                          ),
-                  ),
-                  SizedBox(height: Get.height / 7),
-                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    //!list
+                    const SizedBox(height: 32),
+
+                    //!filter controller
+                    Obx(
+                      () => filterController.filteredProducts.isEmpty
+                          ? Lottie.asset(ANIMATIONS.notFound)
+                          : MasonryGridView.count(
+                              shrinkWrap: true,
+                              crossAxisSpacing: 0,
+                              mainAxisSpacing: 30,
+                              crossAxisCount: 2,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount:
+                                  filterController.filteredProducts.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    detailsProductController.getDetailsProduct(
+                                        filterController
+                                            .filteredProducts[index].id!);
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          SizedBox(
+                                            width: Get.width / 2.5,
+                                            height: Get.height / 4,
+                                            child: CachedNetworkImage(
+                                              imageUrl: filterController
+                                                  .filteredProducts[index]
+                                                  .image!,
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              placeholder: (context, url) =>
+                                                  Lottie.asset(
+                                                      ANIMATIONS.loading),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 10,
+                                            right: 10,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                favoriteController
+                                                    .toggleFavorite(
+                                                  filterController
+                                                      .filteredProducts[index],
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 30,
+                                                height: 30,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(40),
+                                                  color: COLORS.dark,
+                                                ),
+                                                child: Obx(
+                                                  () => Icon(
+                                                    favoriteController
+                                                            .favoriteList
+                                                            .contains(
+                                                                filterController
+                                                                        .filteredProducts[
+                                                                    index])
+                                                        ? CupertinoIcons
+                                                            .heart_solid
+                                                        : CupertinoIcons
+                                                            .suit_heart,
+                                                    size: 18,
+                                                    color: favoriteController
+                                                            .favoriteList
+                                                            .contains(
+                                                                filterController
+                                                                        .filteredProducts[
+                                                                    index])
+                                                        ? Colors.red
+                                                        : COLORS.lightGrey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      SizedBox(
+                                        width: Get.width / 2.5,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              filterController
+                                                  .filteredProducts[index]
+                                                  .name!,
+                                              textAlign: TextAlign.start,
+                                              style: fEncodeSansBold.copyWith(
+                                                fontSize: smallFontSize,
+                                              ),
+                                            ),
+                                            Text(
+                                              filterController
+                                                  .filteredProducts[index]
+                                                  .category!,
+                                              textAlign: TextAlign.start,
+                                              style: fEncodeSansMedium.copyWith(
+                                                color: COLORS.grey,
+                                                fontSize: verySmallFontSize,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  "\$${NumberFormat().format(
+                                                    filterController
+                                                        .filteredProducts[index]
+                                                        .price!,
+                                                  )}",
+                                                  style:
+                                                      fEncodeSansBold.copyWith(
+                                                    fontSize: smallFontSize,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                    SizedBox(height: Get.height / 7),
+                  ],
+                ),
               )
             : Center(
                 child: Lottie.asset(ANIMATIONS.loading, width: 250),
