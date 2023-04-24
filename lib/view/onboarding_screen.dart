@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/config/app_styles.dart';
 import 'package:furniture_app/constants/images.dart';
+import 'package:furniture_app/view/login_screen.dart';
 import 'package:furniture_app/view/main_screen.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -150,7 +151,7 @@ class OnboardingScreen extends StatelessWidget {
                             curve: Curves.easeOut,
                           );
                         } else {
-                          Get.off(() => const MainScreen());
+                          Get.off(() => const LoginScreen());
                         }
                       },
                       child: Text(
