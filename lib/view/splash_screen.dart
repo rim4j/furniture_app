@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/config/app_styles.dart';
 import 'package:furniture_app/constants/images.dart';
+import 'package:furniture_app/services/session_manager.dart';
 import 'package:furniture_app/view/login_screen.dart';
+import 'package:furniture_app/view/main_screen.dart';
 import 'package:furniture_app/view/onboarding_screen.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
@@ -19,7 +22,16 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 4)).then((value) {
       //!navigation
-      Get.off(() => OnboardingScreen());
+      FirebaseAuth auth = FirebaseAuth.instance;
+
+      final user = auth.currentUser;
+
+      if (user != null) {
+        SessionController().userId = user.uid.toString();
+        Get.off(() => const MainScreen());
+      } else {
+        Get.off(() => const LoginScreen());
+      }
     });
   }
 

@@ -38,7 +38,7 @@ class InputText extends StatelessWidget {
       keyboardType: keyBoardType,
       controller: controller,
       validator: validator,
-      style: fEncodeSansMedium,
+      style: fEncodeSansMedium.copyWith(fontSize: smallFontSize),
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,

@@ -3,9 +3,10 @@ import 'package:furniture_app/components/input_text.dart';
 import 'package:furniture_app/components/round_button.dart';
 import 'package:furniture_app/config/app_styles.dart';
 import 'package:furniture_app/constants/images.dart';
+import 'package:furniture_app/controller/login_controller.dart';
 import 'package:furniture_app/view/forget_password_screen.dart';
 import 'package:furniture_app/view/signup_screen.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +16,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final LoginController loginController = Get.put(LoginController());
+
   TextEditingController gmailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -111,22 +114,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             'Forget Password',
                             style: fEncodeSansMedium.copyWith(
-                              fontSize: mediumFontSize,
+                              fontSize: smallFontSize,
                               decoration: TextDecoration.underline,
                             ),
                           ),
                         ),
                       ),
                       SizedBox(height: Get.height * 0.02),
-                      RoundButton(
-                        title: "Login",
-                        loading: false,
-                        onPress: () {
-                          if (_formKey.currentState!.validate()) {
-                            print(gmailController.text);
-                            print(passwordController.text);
-                          }
-                        },
+                      Obx(
+                        () => RoundButton(
+                          title: "Login",
+                          loading: loginController.loading.value,
+                          onPress: () {
+                            if (_formKey.currentState!.validate()) {
+                              loginController.login(gmailController.text,
+                                  passwordController.text);
+                            }
+                          },
+                        ),
                       ),
                       SizedBox(height: Get.height * 0.02),
                       GestureDetector(
@@ -134,13 +139,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text.rich(TextSpan(
                             text: "Don't have an account?",
                             style: fEncodeSansMedium.copyWith(
-                              fontSize: mediumFontSize,
+                              fontSize: smallFontSize,
                             ),
                             children: [
                               TextSpan(
                                 text: "Sign Up",
                                 style: fEncodeSansMedium.copyWith(
-                                  fontSize: mediumFontSize,
+                                  fontSize: smallFontSize,
                                   decoration: TextDecoration.underline,
                                 ),
                               )

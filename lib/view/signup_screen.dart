@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/config/app_styles.dart';
+import 'package:furniture_app/controller/signup_controller.dart';
 import 'package:get/get.dart';
 
 import '../components/input_text.dart';
@@ -20,6 +21,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final _formKey = GlobalKey<FormState>();
   bool _isObsecured = true;
+
+  final SignUpController signUpController = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {
@@ -121,16 +124,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       SizedBox(height: Get.height * 0.04),
-                      RoundButton(
-                        title: "Sign up",
-                        loading: false,
-                        onPress: () {
-                          if (_formKey.currentState!.validate()) {
-                            print(usernameController.text);
-                            print(gmailController.text);
-                            print(passwordController.text);
-                          }
-                        },
+                      Obx(
+                        () => RoundButton(
+                          title: "Sign up",
+                          loading: signUpController.loading.value,
+                          onPress: () {
+                            if (_formKey.currentState!.validate()) {
+                              signUpController.signUp(
+                                  usernameController.text,
+                                  gmailController.text,
+                                  passwordController.text);
+                            }
+                          },
+                        ),
                       ),
                       SizedBox(height: Get.height * 0.02),
                       SizedBox(height: Get.height * 0.02),

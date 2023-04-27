@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/config/app_styles.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
 class RoundButton extends StatelessWidget {
@@ -36,7 +37,7 @@ class RoundButton extends StatelessWidget {
                 child: Text(
                   title,
                   style: fEncodeSansMedium.copyWith(
-                      fontSize: mediumFontSize, color: textColor),
+                      fontSize: smallFontSize, color: textColor),
                 ),
               ),
       ),

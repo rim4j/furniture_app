@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/controller/forget_password_controller.dart';
 import 'package:get/get.dart';
 
 import '../components/input_text.dart';
@@ -14,6 +15,9 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  final ForgetPasswordController forgetPasswordController =
+      Get.put(ForgetPasswordController());
+
   TextEditingController gmailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -67,14 +71,17 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             const Icon(Icons.email_rounded, color: COLORS.grey),
                       ),
                       SizedBox(height: Get.height * 0.02),
-                      RoundButton(
-                        title: "Recovery",
-                        loading: false,
-                        onPress: () {
-                          if (_formKey.currentState!.validate()) {
-                            print(gmailController.text);
-                          }
-                        },
+                      Obx(
+                        () => RoundButton(
+                          title: "Recovery",
+                          loading: forgetPasswordController.loading.value,
+                          onPress: () {
+                            if (_formKey.currentState!.validate()) {
+                              forgetPasswordController
+                                  .forgetPassword(gmailController.text);
+                            }
+                          },
+                        ),
                       ),
                       SizedBox(height: Get.height * 0.02),
                     ],
