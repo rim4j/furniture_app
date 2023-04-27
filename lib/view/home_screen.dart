@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -16,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 
+import '../services/session_manager.dart';
 import '../utils/convert_hex.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -26,6 +28,8 @@ class HomeScreen extends StatelessWidget {
   final DetailsProductController detailsProductController =
       Get.put(DetailsProductController());
   final FavoriteController favoriteController = Get.put(FavoriteController());
+
+  final ref = FirebaseDatabase.instance.ref("User");
 
   final RxDouble price = RxDouble(0.0);
 
@@ -392,47 +396,74 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       //!header
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Image.asset(
-                                  IMAGES.logo,
-                                  scale: 8,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: StreamBuilder(
+                            stream: ref
+                                .child(SessionController().userId.toString())
+                                .onValue,
+                            builder: (context, AsyncSnapshot snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasData) {
+                                Map<dynamic, dynamic> map =
+                                    snapshot.data.snapshot.value;
+
+                                return Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Hello, Welcome 👋",
-                                      style: fEncodeSansBold.copyWith(
-                                        color: COLORS.dark,
-                                        fontSize: smallFontSize,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Image.asset(
+                                          IMAGES.logo,
+                                          scale: 8,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Hello, Welcome 👋",
+                                              style: fEncodeSansBold.copyWith(
+                                                color: COLORS.dark,
+                                                fontSize: smallFontSize,
+                                              ),
+                                            ),
+                                            Text(
+                                              map["userName"],
+                                              style: fEncodeSansBold.copyWith(
+                                                color: COLORS.dark,
+                                                fontSize: verySmallFontSize,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      "John Doe",
-                                      style: fEncodeSansBold.copyWith(
-                                        color: COLORS.dark,
-                                        fontSize: verySmallFontSize,
+                                    CircleAvatar(
+                                      radius: 20,
+                                      backgroundImage: NetworkImage(
+                                        map["profile"] == ""
+                                            ? "https://t4.ftcdn.net/jpg/04/70/29/97/240_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                                            : map["profile"].toString(),
                                       ),
                                     ),
                                   ],
-                                ),
-                              ],
-                            ),
-                            const CircleAvatar(
-                              radius: 20,
-                              backgroundImage: NetworkImage(
-                                  "https://xsgames.co/randomusers/assets/avatars/male/74.jpg"),
-                            ),
-                          ],
-                        ),
-                      ),
+                                );
+                              } else {
+                                return Center(
+                                    child: Text(
+                                  "somethings went wrong",
+                                  style: fEncodeSansBold.copyWith(
+                                      fontSize: largeFontSize),
+                                ));
+                              }
+                            },
+                          )),
                       const SizedBox(height: 24),
 
                       // !search field

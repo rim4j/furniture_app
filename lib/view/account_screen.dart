@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/furniture_divider.dart';
+import 'package:furniture_app/components/profile_item.dart';
 import 'package:furniture_app/components/round_button.dart';
 import 'package:furniture_app/config/app_styles.dart';
 import 'package:furniture_app/services/session_manager.dart';
@@ -11,9 +13,17 @@ import 'package:lottie/lottie.dart';
 
 import '../constants/images.dart';
 
-class AccountScreen extends StatelessWidget {
-  AccountScreen({super.key});
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({super.key});
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  final ref = FirebaseDatabase.instance.ref("User");
 
   void logout() {
     auth.signOut().then((value) {
@@ -27,132 +37,123 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: COLORS.bg,
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: Get.width,
-                height: Get.height / 3,
-                foregroundDecoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: GradientColors.backgroundProfile,
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-                child: CachedNetworkImage(
-                  imageUrl:
-                      "https://xsgames.co/randomusers/assets/avatars/male/74.jpg",
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
+      body: StreamBuilder(
+        stream: ref.child(SessionController().userId.toString()).onValue,
+        builder: (context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData) {
+            Map<dynamic, dynamic> map = snapshot.data.snapshot.value;
+            return Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: Get.width,
+                      height: Get.height / 3,
+                      foregroundDecoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: GradientColors.backgroundProfile,
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ),
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: map["profile"] == ""
+                            ? "https://t4.ftcdn.net/jpg/04/70/29/97/240_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                            : map["profile"],
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        placeholder: (context, url) =>
+                            Lottie.asset(ANIMATIONS.loading),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
-                  ),
-                  placeholder: (context, url) =>
-                      Lottie.asset(ANIMATIONS.loading),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-              ),
-              Positioned(
-                bottom: 10,
-                right: Get.width / 15,
-                child: IconButton(
-                  onPressed: () {
-                    print("selected image profile");
-                  },
-                  icon: const Icon(
-                    Icons.camera_alt_outlined,
-                    color: COLORS.bg,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 10,
-                left: Get.width / 15,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(color: COLORS.grey, width: 3),
-                  ),
-                  width: 100,
-                  height: 100,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image.network(
-                      "https://xsgames.co/randomusers/assets/avatars/male/74.jpg",
-                      fit: BoxFit.cover,
+                    Positioned(
+                      bottom: 10,
+                      right: Get.width / 15,
+                      child: IconButton(
+                        onPressed: () {
+                          print("selected image profile");
+                        },
+                        icon: const Icon(
+                          Icons.camera_alt_outlined,
+                          color: COLORS.bg,
+                        ),
+                      ),
                     ),
-                  ),
+                    Positioned(
+                      bottom: 10,
+                      left: Get.width / 15,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: COLORS.grey, width: 3),
+                        ),
+                        width: 100,
+                        height: 100,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                            map["profile"] == ""
+                                ? "https://t4.ftcdn.net/jpg/04/70/29/97/240_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                                : map["profile"].toString(),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "username",
-                  style: fEncodeSansBold.copyWith(
-                    fontSize: mediumFontSize,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "amir hossein",
-                  style: fEncodeSansMedium.copyWith(
-                    fontSize: smallFontSize,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                furnitureDivider(),
                 const SizedBox(height: 20),
-                Text(
-                  "email",
-                  style: fEncodeSansBold.copyWith(
-                    fontSize: mediumFontSize,
-                  ),
+                Column(
+                  children: [
+                    ProfileItem(
+                      title: "username",
+                      value: map["userName"],
+                      icon: const Icon(Icons.person),
+                    ),
+                    furnitureDivider(),
+                    ProfileItem(
+                      title: "email",
+                      value: map["email"],
+                      icon: const Icon(Icons.email),
+                    ),
+                    furnitureDivider(),
+                    ProfileItem(
+                      title: "user id",
+                      value: map["uid"],
+                      icon: const Icon(Icons.abc_outlined),
+                    ),
+                    furnitureDivider(),
+                    const SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: RoundButton(
+                        color: Colors.red,
+                        title: "Log out",
+                        onPress: () => logout(),
+                      ),
+                    )
+                  ],
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  "amirhosseinjalali818@gmail.com",
-                  style: fEncodeSansMedium.copyWith(
-                    fontSize: smallFontSize,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                furnitureDivider(),
-                const SizedBox(height: 20),
-                Text(
-                  "user id",
-                  style: fEncodeSansBold.copyWith(
-                    fontSize: mediumFontSize,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  SessionController().userId.toString(),
-                  style: fEncodeSansMedium.copyWith(
-                    fontSize: smallFontSize,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                furnitureDivider(),
-                const SizedBox(height: 40),
-                RoundButton(
-                  color: Colors.red,
-                  title: "Log out",
-                  onPress: () => logout(),
-                )
               ],
-            ),
-          ),
-        ],
+            );
+          } else {
+            return Center(
+                child: Text(
+              "somethings went wrong",
+              style: fEncodeSansBold.copyWith(fontSize: largeFontSize),
+            ));
+          }
+        },
       ),
     );
   }
