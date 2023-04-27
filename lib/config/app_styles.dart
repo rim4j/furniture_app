@@ -10,6 +10,13 @@ class COLORS {
   static const Color yellow = Color.fromARGB(255, 255, 211, 60);
 }
 
+class GradientColors {
+  static const List<Color> backgroundProfile = [
+    Color.fromARGB(255, 0, 0, 0),
+    Color.fromARGB(0, 0, 0, 0)
+  ];
+}
+
 final fInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(12),
   borderSide: const BorderSide(color: COLORS.lightGrey),

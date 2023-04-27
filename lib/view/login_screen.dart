@@ -3,7 +3,7 @@ import 'package:furniture_app/components/input_text.dart';
 import 'package:furniture_app/components/round_button.dart';
 import 'package:furniture_app/config/app_styles.dart';
 import 'package:furniture_app/constants/images.dart';
-import 'package:furniture_app/controller/login_controller.dart';
+import 'package:furniture_app/controller/auth/login_controller.dart';
 import 'package:furniture_app/view/forget_password_screen.dart';
 import 'package:furniture_app/view/signup_screen.dart';
 import 'package:get/get.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/controller/forget_password_controller.dart';
+import 'package:furniture_app/controller/auth/forget_password_controller.dart';
 import 'package:get/get.dart';
 
 import '../components/input_text.dart';

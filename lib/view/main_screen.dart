@@ -30,7 +30,7 @@ class MainScreen extends StatelessWidget {
             HomeScreen(),
             CartScreen(),
             FavoritesScreen(),
-            AccountScreen()
+            AccountScreen(),
           ],
         ),
       ),

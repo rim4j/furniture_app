@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/config/app_styles.dart';
-import 'package:furniture_app/controller/signup_controller.dart';
+import 'package:furniture_app/controller/auth/signup_controller.dart';
 import 'package:get/get.dart';
 
 import '../components/input_text.dart';

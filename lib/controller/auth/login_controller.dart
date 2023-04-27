@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:furniture_app/view/main_screen.dart';
 import 'package:get/get.dart';
 
-import '../services/session_manager.dart';
+import '../../services/session_manager.dart';
 
 class LoginController extends GetxController {
   RxBool loading = RxBool(false);
