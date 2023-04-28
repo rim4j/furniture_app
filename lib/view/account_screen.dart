@@ -3,27 +3,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/furniture_divider.dart';
+import 'package:furniture_app/components/input_text.dart';
 import 'package:furniture_app/components/profile_item.dart';
 import 'package:furniture_app/components/round_button.dart';
 import 'package:furniture_app/config/app_styles.dart';
+import 'package:furniture_app/controller/profile_controller.dart';
 import 'package:furniture_app/services/session_manager.dart';
 import 'package:furniture_app/view/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sliding_sheet/sliding_sheet.dart';
 
 import '../constants/images.dart';
 
-class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
-
-  @override
-  State<AccountScreen> createState() => _AccountScreenState();
-}
-
-class _AccountScreenState extends State<AccountScreen> {
+class AccountScreen extends StatelessWidget {
+  AccountScreen({super.key});
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   final ref = FirebaseDatabase.instance.ref("User");
+
+  ProfileController profileController = Get.put(ProfileController());
 
   void logout() {
     auth.signOut().then((value) {
@@ -35,6 +34,136 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void updateUserNameProfileBottomSheet(String username) async {
+      profileController.usernameController.text = username;
+      await showSlidingBottomSheet(context, builder: (context) {
+        return SlidingSheetDialog(
+          elevation: 8,
+          cornerRadius: 20,
+          avoidStatusBar: true,
+          snapSpec: const SnapSpec(
+            snap: true,
+            snappings: [0.4, 0.8, 1.0],
+            positioning: SnapPositioning.relativeToAvailableSpace,
+          ),
+          headerBuilder: (context, state) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Container(
+                  width: 50,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: COLORS.grey,
+                    borderRadius: BorderRadius.circular(500),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          builder: (context, state) {
+            return SizedBox(
+              width: Get.width,
+              child: Material(
+                color: COLORS.bg,
+                child: ListView(
+                  shrinkWrap: true,
+                  primary: false,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Form(
+                        key: profileController.formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InputText(
+                              controller: profileController.usernameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter username";
+                                } else if (value.length < 4) {
+                                  return "At least 4 characters";
+                                } else if (value.length > 13) {
+                                  return "Maximum characters is 13";
+                                }
+                                return null;
+                              },
+                              keyBoardType: TextInputType.emailAddress,
+                              hint: "username",
+                              prefixIcon:
+                                  const Icon(Icons.person, color: COLORS.grey),
+                            ),
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      child: Text(
+                                        "cancel",
+                                        style: fEncodeSansMedium.copyWith(
+                                            fontSize: smallFontSize),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        backgroundColor: COLORS.dark,
+                                      ),
+                                      onPressed: () {
+                                        if (profileController
+                                            .formKey.currentState!
+                                            .validate()) {
+                                          //update user name in firebase
+                                          profileController.updateUserName();
+
+                                          Get.back();
+                                        }
+                                      },
+                                      child: Text(
+                                        "ok",
+                                        style: fEncodeSansMedium.copyWith(
+                                            fontSize: smallFontSize),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      });
+    }
+
     return Scaffold(
       backgroundColor: COLORS.bg,
       body: StreamBuilder(
@@ -116,18 +245,23 @@ class _AccountScreenState extends State<AccountScreen> {
                 Column(
                   children: [
                     ProfileItem(
+                      onTap: () {
+                        updateUserNameProfileBottomSheet(map["userName"]);
+                      },
                       title: "username",
                       value: map["userName"],
                       icon: const Icon(Icons.person),
                     ),
                     furnitureDivider(),
                     ProfileItem(
+                      onTap: () {},
                       title: "email",
                       value: map["email"],
                       icon: const Icon(Icons.email),
                     ),
                     furnitureDivider(),
                     ProfileItem(
+                      onTap: () {},
                       title: "user id",
                       value: map["uid"],
                       icon: const Icon(Icons.abc_outlined),

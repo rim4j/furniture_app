@@ -1,10 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/route_manager.dart';
 
 import '../config/app_styles.dart';
-import 'furniture_divider.dart';
 
 class ProfileItem extends StatelessWidget {
   const ProfileItem({
@@ -12,15 +8,17 @@ class ProfileItem extends StatelessWidget {
     required this.title,
     required this.value,
     required this.icon,
+    required this.onTap,
   });
   final String title;
   final String value;
   final Icon icon;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Row(
         children: [
           Padding(
