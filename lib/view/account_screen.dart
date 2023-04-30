@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -43,7 +45,7 @@ class AccountScreen extends StatelessWidget {
           avoidStatusBar: true,
           snapSpec: const SnapSpec(
             snap: true,
-            snappings: [0.4, 0.8, 1.0],
+            snappings: [0.4],
             positioning: SnapPositioning.relativeToAvailableSpace,
           ),
           headerBuilder: (context, state) => Column(
@@ -98,8 +100,8 @@ class AccountScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 10),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -164,6 +166,103 @@ class AccountScreen extends StatelessWidget {
       });
     }
 
+    void updateProfileImage() async {
+      await showSlidingBottomSheet(context, builder: (context) {
+        return SlidingSheetDialog(
+          elevation: 8,
+          cornerRadius: 20,
+          avoidStatusBar: true,
+          snapSpec: const SnapSpec(
+            snap: true,
+            snappings: [0.4, 0.8, 1.0],
+            positioning: SnapPositioning.relativeToAvailableSpace,
+          ),
+          headerBuilder: (context, state) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Container(
+                  width: 50,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: COLORS.grey,
+                    borderRadius: BorderRadius.circular(500),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          builder: (context, state) {
+            return SizedBox(
+              width: Get.width,
+              child: Material(
+                color: COLORS.bg,
+                child: ListView(
+                  shrinkWrap: true,
+                  primary: false,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        print('pick camera picture');
+                        profileController.pickCameraImage();
+
+                        Get.back();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.camera,
+                              color: COLORS.dark,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              "Camera",
+                              style: fEncodeSansMedium.copyWith(
+                                fontSize: smallFontSize,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        print('pick gallery picture');
+                        profileController.pickGalleryImage();
+
+                        Get.back();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.image_outlined,
+                              color: COLORS.dark,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              "Gallery",
+                              style: fEncodeSansMedium.copyWith(
+                                fontSize: smallFontSize,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      });
+    }
+
     return Scaffold(
       backgroundColor: COLORS.bg,
       body: StreamBuilder(
@@ -210,7 +309,7 @@ class AccountScreen extends StatelessWidget {
                       right: Get.width / 15,
                       child: IconButton(
                         onPressed: () {
-                          print("selected image profile");
+                          updateProfileImage();
                         },
                         icon: const Icon(
                           Icons.camera_alt_outlined,
@@ -218,24 +317,30 @@ class AccountScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      bottom: 10,
-                      left: Get.width / 15,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: COLORS.grey, width: 3),
-                        ),
-                        width: 100,
-                        height: 100,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image.network(
-                            map["profile"] == ""
-                                ? "https://t4.ftcdn.net/jpg/04/70/29/97/240_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
-                                : map["profile"].toString(),
-                            fit: BoxFit.cover,
+                    Obx(
+                      () => Positioned(
+                        bottom: 10,
+                        left: Get.width / 15,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(color: COLORS.grey, width: 3),
                           ),
+                          width: 100,
+                          height: 100,
+                          child: profileController.loading.value
+                              ? const CircularProgressIndicator(
+                                  color: COLORS.dark,
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Image.network(
+                                    map["profile"] == ""
+                                        ? "https://t4.ftcdn.net/jpg/04/70/29/97/240_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                                        : map["profile"].toString(),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -275,7 +380,7 @@ class AccountScreen extends StatelessWidget {
                         title: "Log out",
                         onPress: () => logout(),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],

@@ -409,7 +409,9 @@ class HomeScreen extends StatelessWidget {
                                   builder: (context, AsyncSnapshot snapshot) {
                                     if (!snapshot.hasData) {
                                       return const Center(
-                                          child: CircularProgressIndicator());
+                                          child: CircularProgressIndicator(
+                                        color: COLORS.dark,
+                                      ));
                                     } else if (snapshot.hasData) {
                                       Map<dynamic, dynamic> map =
                                           snapshot.data.snapshot.value;
